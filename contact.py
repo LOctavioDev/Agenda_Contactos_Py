@@ -4,8 +4,8 @@ def register(name, lastname, enterprise, phone, email, adress):
     try:
         con = connect()
         cursor = con.cursor()
-        sql_statement = ''' INSERT INTO tbb_contacto(
-                name, last_name, company_name, phone, email, direction) 
+        sql_statement = ''' INSERT INTO tbb_contactos (
+                name, last_name, company_name, phone, email, address) 
                 VALUES( ?,?,?,?,?,?) '''
         data = (name, lastname, enterprise, phone, email, adress)
         cursor.execute(sql_statement, data)
@@ -20,9 +20,25 @@ def show_data():
     try:
         con = connect()
         cursor = con.cursor()
-        sql_statement = ''' SELECT * FROM tbb_contacto '''
+        sql_statement = ''' SELECT * FROM tbb_contactos '''
         cursor.execute(sql_statement)
         data = cursor.fetchall()
         con.close()
     except sqlite3.Error as err:
         print(f'Something went wrong {err}')
+
+    return data
+
+def search(id): 
+    data = []
+    try:
+        con = connect()
+        cursor = con.cursor()
+        sql_statement = ''' SELECT * FROM tbb_contactos WHERE id = ? '''
+        cursor.execute(sql_statement, (id,))
+        data = cursor.fetchall()
+        con.close()
+    except sqlite3.Error as err:
+        print(f'Something went wrong {err}')
+
+    return data
